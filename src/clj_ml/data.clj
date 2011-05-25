@@ -301,7 +301,7 @@ If the class is nominal then the string value (not keyword) is returned."
 (defn instance-set-class
   "Sets the value (label) of the class attribute for this instance"
   [^Instance instance ^String val]
-  (let [attr (.classAttribute instance)]
+  (let [^Attribute attr (.classAttribute instance)]
     (if (.isNominal attr) ; Other types might also need special handling
       (let [string-value (.value attr val)]
         (.setClassValue instance string-value))
