@@ -48,6 +48,7 @@
         _   (clj-ml.data/dataset-set-class ds 2)
         _   (clj-ml.data/dataset-set-class tds 2)
         _   (classifier-train c ds)
+        _   (classifier-label c (clj-ml.data/make-instance ds [1 2 :m]))
         res (classifier-evaluate c :dataset ds tds)]
     (is (= 26 (count (keys res))))))
 
