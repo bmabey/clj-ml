@@ -621,7 +621,7 @@
 
    The function returns the newly classified instance.
 
-   This call is destructive, the instance passed as an argument
+   This call is destructive, the instance passed as an argumentgt
    is modified.
 
     ; We create the instance to classify
@@ -641,4 +641,6 @@
 "
   ([classifier instance]
      (let [cls (classifier-classify classifier instance)]
-       (instance-set-class instance cls))))
+       (if (.. instance classAttribute isNominal)
+         (instance-set-class instance (.value (.classAttribute instance) cls))
+         (instance-set-class instance cls)))))
