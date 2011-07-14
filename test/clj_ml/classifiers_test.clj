@@ -51,6 +51,26 @@
         res (classifier-evaluate c :dataset ds tds)]
     (is (= 26 (count (keys res))))))
 
+
+(deftest test-classifier-label-updates-nominal-class
+  (let [c   (make-classifier :decision-tree :c45)
+        ds  (clj-ml.data/make-dataset "test" [:a :b {:c [:m :n]}] [[1 2 :m] [4 5 :m]])
+        _   (clj-ml.data/dataset-set-class ds 2)
+        _   (classifier-train c ds)
+        inst  (clj-ml.data/make-instance ds [1 2 :m])]
+    (classifier-label c inst)
+    (is (= (instance-get-class inst) "m"))))
+
+(deftest test-classifier-label-updates-numeric-class
+  (let [c   (make-classifier :regression :linear)
+        ds  (clj-ml.data/make-dataset "test" [:a :b :c] [[1 1 3] [2 2 3]])
+        _   (clj-ml.data/dataset-set-class ds 2)
+        _   (classifier-train c ds)
+        inst  (clj-ml.data/make-instance ds [1 1 3])]
+    (classifier-label c inst)
+    (is (= (instance-get-class inst) 3))))
+
+
 (deftest make-classifier-svm-smo-polykernel
   (let [svm (make-classifier :support-vector-machine :smo {:kernel-function {:polynomic {:exponent 2.0}}})]
     (is (= weka.classifiers.functions.supportVector.PolyKernel
